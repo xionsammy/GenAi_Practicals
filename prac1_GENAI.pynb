@@ -1,1 +1,86 @@
+# ==============================
+# TEXT PREPROCESSING IN PYTHON
+# ==============================
 
+# Import Required Libraries
+import string
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+# Download NLTK Resources (Run Once)
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('punkt_tab')
+
+# =====================================
+# FUNCTION FOR TEXT PREPROCESSING
+# =====================================
+
+def preprocess_text(text):
+    # 1. Convert to Lowercase
+    text = text.lower()
+
+    # 2. Remove Punctuation
+    text = text.translate(str.maketrans('', '', string.punctuation))
+
+    # 3. Remove Numbers
+    text = re.sub(r'\d+', '', text)
+
+    # 4. Remove Stopwords
+    stop_words = set(stopwords.words('english'))
+
+    words = word_tokenize(text)
+
+    filtered_words = [
+        word for word in words
+        if word not in stop_words
+    ]
+
+    text = ' '.join(filtered_words)
+
+    return text
+
+
+# =====================================
+# EXAMPLE 1 : CUSTOMER REVIEWS
+# =====================================
+
+sample_dataset = """
+1.I absolutely LOVE this phone!! Battery lasts 2 days.
+2.Worst Product Ever :( Money Wasted !!
+3.Delivery was quick, but the packaging was damaged :( :(
+4.Excellent camera quality and amazing performance !!
+"""
+
+print("Original Text:\n")
+print(sample_dataset)
+
+processed_dataset = preprocess_text(sample_dataset)
+
+print("\nProcessed Text:\n")
+print(processed_dataset)
+
+
+# =====================================
+# EXAMPLE 2 : SPAM EMAIL DETECTION
+# =====================================
+
+sample_email = """
+Subject: Urgent: Your account has been compromised!
+Click this link now:
+http://malicious.com/phish123
+
+Get FREE money!
+Limited time offer!
+Call 1-800-spam-now.
+"""
+
+print("\n\nOriginal Email:\n")
+print(sample_email)
+
+processed_email = preprocess_text(sample_email)
+
+print("\nProcessed Email:\n")
+print(processed_email)
